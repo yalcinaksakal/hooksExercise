@@ -21,4 +21,10 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.26);
   display: flex;
   justify-content: space-between;
+  transition: transform ease-out 0.2s;
+}
+
+.ingredient-list li:hover {
+  transform: scale(1.05);
+  box-shadow: 0 1px 4px rgba(243, 68, 68, 0.408);
 }

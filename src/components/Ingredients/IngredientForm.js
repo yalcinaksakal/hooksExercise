@@ -29,8 +29,8 @@ const IngredientForm = React.memo(props => {
             <input
               type="number"
               id="amount"
-              value={amount < 0 ? 0 : amount}
-              onChange={e => setAmount(e.target.value)}
+              value={amount}
+              onChange={e => setAmount(e.target.value < 0 ? 0 : e.target.value)}
             />
           </div>
           <div className="ingredient-form__actions">
