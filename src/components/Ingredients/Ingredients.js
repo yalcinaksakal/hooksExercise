@@ -1,19 +1,32 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import idGen from "../../helper/idGenerator";
 import ErrorModal from "../UI/ErrorModal";
 import IngredientForm from "./IngredientForm";
 import IngredientList from "./IngredientList";
 import Search from "./Search";
+
+const ingredientReducer = (currentIngredients, action) => {
+  switch (action.type) {
+    case "FETCH":
+      return action.ingredients;
+
+    default:
+      throw new Error("shouldnt get there");
+  }
+};
+
 const Ingredients = () => {
-  const [userIngredients, setUserIngredients] = useState([]);
+  // const [userIngredients, setUserIngredients] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [err, setErr] = useState();
+
+  const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
   const fetchNewList = useCallback((newList = null, filterText = null) => {
     console.log("fetching");
     setIsloading(true);
     setErr(null);
     fetch(
-      "https://order-meal-a2f7a-default-rtdb.firebaseio.com/ingredients.jon",
+      "https://order-meal-a2f7a-default-rtdb.firebaseio.com/ingredients.json",
       newList
         ? {
             method: "PUT",
@@ -26,14 +39,23 @@ const Ingredients = () => {
       .then(data => {
         setIsloading(false);
         if (!newList) newList = data ? data : [];
-        setUserIngredients(
-          !filterText
+        dispatch({
+          type: "FETCH",
+          ingredients: !filterText
             ? newList
             : newList.filter(ingredient =>
                 ingredient.title.includes(filterText)
-              )
-        );
+              ),
+        });
       })
+      // setUserIngredients(
+      //   !filterText
+      //     ? newList
+      //     : newList.filter(ingredient =>
+      //         ingredient.title.includes(filterText)
+      //       )
+      // );
+      // })
       .catch(err => {
         setErr(`sth went wrong (${err.message})`);
         setIsloading(false);

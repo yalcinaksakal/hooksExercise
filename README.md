@@ -1,2 +1,2 @@
 hoooks exercise
-useEffect (and clean up function), useRef, useState, useCallback
+useEffect (and clean up function), useRef, useState, useCallback, useReducer
