@@ -10,7 +10,7 @@ const Auth = props => {
   return (
     <div className="auth">
       <Card>
-        <h2>You are not authenticated!</h2>
+     
         <p>Please log in to continue.</p>
         <button onClick={login}>Log In</button>
       </Card>
