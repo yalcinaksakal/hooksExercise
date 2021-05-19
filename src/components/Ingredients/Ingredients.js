@@ -8,6 +8,7 @@ import Search from "./Search";
 
 const Ingredients = () => {
   const {
+    hasIngredient,
     ingredients: userIngredients,
     isLoading,
     err,
@@ -21,7 +22,6 @@ const Ingredients = () => {
 
   const addIngredientHandler = useCallback(
     ingredient => {
-    
       const index = userIngredients.findIndex(
         ing => ing.title === ingredient.title
       );
@@ -49,9 +49,10 @@ const Ingredients = () => {
 
   const filterIngredientHandler = useCallback(
     filterText => {
+      if (!hasIngredient) return;
       fetchNewList(null, filterText);
     },
-    [fetchNewList]
+    [fetchNewList, hasIngredient]
   );
 
   const ingredientListEl = useMemo(() => {

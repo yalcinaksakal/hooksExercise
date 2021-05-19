@@ -3,13 +3,15 @@ import Spinner from "../UI/LoadingIndicator";
 import "./IngredientList.css";
 
 const IngredientList = props => {
-  console.log("RENDERING LIST", props);
+  console.log("RENDERING LIST");
   return (
     <section className="ingredient-list">
-      <h2>Ingredients</h2>
-      {props.loading ? (
-        <Spinner />
-      ) : props.ingredients.length ? (
+      <div className="title">
+        <h2>Ingredients</h2>
+        {props.loading && <Spinner />}
+      </div>
+
+      {props.ingredients.length ? (
         <ul>
           {props.ingredients.map(ig => (
             <li key={ig.id} onClick={props.onRemoveItem.bind(null, ig.id)}>

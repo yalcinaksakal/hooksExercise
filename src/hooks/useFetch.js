@@ -5,7 +5,12 @@ const httpReducer = (state, action) => {
     case "SEND":
       return { ...state, err: null, isLoading: true };
     case "FETCH":
-      return { ingredients: action.ingredients, err: null, isLoading: false };
+      return {
+        ingredients: action.ingredients,
+        err: null,
+        isLoading: false,
+        hasIngredient: action.hasIngredient,
+      };
     case "ERR":
       return { ...state, err: action.err, isLoading: false };
     case "CLR":
@@ -20,6 +25,7 @@ const useHttp = () => {
     ingredients: [],
     err: null,
     isLoading: false,
+    hasIngredient: false,
   });
 
   const sendRequest = useCallback((newList = null, filterText = null) => {
@@ -45,6 +51,7 @@ const useHttp = () => {
             : newList.filter(ingredient =>
                 ingredient.title.includes(filterText)
               ),
+          hasIngredient: newList.length > 0,
         });
       })
       .catch(err => {
