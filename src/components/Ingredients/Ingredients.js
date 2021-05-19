@@ -37,11 +37,11 @@ const Ingredients = () => {
   // empty dependency array []=componentDidMount
   useEffect(() => {
     fetchNewList();
-  }, []);
+  }, [fetchNewList]);
 
-  useEffect(() => {
-    console.log("rendering ingredients", userIngredients);
-  }, [userIngredients]);
+  // useEffect(() => {
+  //   console.log("rendering ingredients", userIngredients);
+  // }, [userIngredients]);
 
   const addIngredientHandler = ingredient => {
     if (!ingredient.amount) return;

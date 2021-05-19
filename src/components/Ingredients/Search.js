@@ -7,14 +7,18 @@ const Search = React.memo(props => {
   const searchRef = useRef();
   const { onSearch } = props;
   const [filter, setFilter] = useState("");
+  const [lastSearchedText, setLastSearchedText] = useState("");
   useEffect(() => {
     const inputTimer = setTimeout(() => {
-      console.log("searching");
       // filter's value is the value .5s ago, compare it with the current value and decide whether user stopped writing or not
-      if (filter === searchRef.current.value) onSearch(filter);
+      if (filter !== lastSearchedText) {
+        console.log("searching");
+        setLastSearchedText(filter);
+        onSearch(filter);
+      }
     }, 500);
     return () => clearTimeout(inputTimer);
-  }, [filter, onSearch, searchRef]);
+  }, [filter, onSearch, lastSearchedText]);
   return (
     <section className="search">
       <Card>
