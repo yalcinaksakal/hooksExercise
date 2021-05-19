@@ -9,6 +9,7 @@ const IngredientForm = React.memo(props => {
   console.log("RENDERING FORM");
   const submitHandler = event => {
     event.preventDefault();
+    if (+amount < 1) return;
     setTitle("");
     setAmount("");
     props.onAddIngredient({ title: title.toLowerCase(), amount: +amount });
