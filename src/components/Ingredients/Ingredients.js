@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import idGen from "../../helper/idGenerator";
-import useHttp from "../../hooks/useFetch";
+import useHttp from "../../hooks/useHttp";
 import ErrorModal from "../UI/ErrorModal";
 import IngredientForm from "./IngredientForm";
 import IngredientList from "./IngredientList";
