@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import idGen from "../../helper/idGenerator";
-
+import ErrorModal from "../UI/ErrorModal";
 import IngredientForm from "./IngredientForm";
 import IngredientList from "./IngredientList";
 import Search from "./Search";
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
   const [isLoading, setIsloading] = useState(false);
+  const [err, setErr] = useState();
   const fetchNewList = useCallback((newList = null, filterText = null) => {
     console.log("fetching");
     setIsloading(true);
+    setErr(null);
     fetch(
-      "https://order-meal-a2f7a-default-rtdb.firebaseio.com/ingredients.json",
+      "https://order-meal-a2f7a-default-rtdb.firebaseio.com/ingredients.jon",
       newList
         ? {
             method: "PUT",
@@ -31,6 +33,10 @@ const Ingredients = () => {
                 ingredient.title.includes(filterText)
               )
         );
+      })
+      .catch(err => {
+        setErr(`sth went wrong (${err.message})`);
+        setIsloading(false);
       });
   }, []);
   //after and every render cycle useEffect runs
@@ -76,12 +82,15 @@ const Ingredients = () => {
 
       <section>
         <Search onSearch={filterIngredientHandler} />
-
-        <IngredientList
-          ingredients={userIngredients}
-          onRemoveItem={removeIngredientHandler}
-          loading={isLoading}
-        />
+        {err ? (
+          <ErrorModal onClose={() => setErr(null)}>{err}</ErrorModal>
+        ) : (
+          <IngredientList
+            ingredients={userIngredients}
+            onRemoveItem={removeIngredientHandler}
+            loading={isLoading}
+          />
+        )}
       </section>
     </div>
   );

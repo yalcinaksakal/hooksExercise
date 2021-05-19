@@ -1,8 +1,9 @@
 .error-modal {
   position: fixed;
   top: 30vh;
-  left: calc(50% - 15rem);
-  width: 30rem;
+  left: 10%;
+  width: 80%;
+  max-width: 30rem;
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   z-index: 100;
@@ -18,13 +19,13 @@
 }
 
 .error-modal p {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 .error-modal__actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0.5rem;
 }
 
 .backdrop {
@@ -35,4 +36,9 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.75);
   z-index: 50;
+}
+@media (min-width: 600px) {
+  .error-modal {
+    left: calc(50% - 15rem);
+  }
 }
