@@ -6,9 +6,10 @@ import IngredientList from "./IngredientList";
 import Search from "./Search";
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
-
+  const [isLoading, setIsloading] = useState(false);
   const fetchNewList = useCallback((newList = null, filterText = null) => {
     console.log("fetching");
+    setIsloading(true);
     fetch(
       "https://order-meal-a2f7a-default-rtdb.firebaseio.com/ingredients.json",
       newList
@@ -21,6 +22,7 @@ const Ingredients = () => {
     )
       .then(repsonse => repsonse.json())
       .then(data => {
+        setIsloading(false);
         if (!newList) newList = data ? data : [];
         setUserIngredients(
           !filterText
@@ -74,9 +76,11 @@ const Ingredients = () => {
 
       <section>
         <Search onSearch={filterIngredientHandler} />
+
         <IngredientList
           ingredients={userIngredients}
           onRemoveItem={removeIngredientHandler}
+          loading={isLoading}
         />
       </section>
     </div>
