@@ -3,6 +3,7 @@ import Spinner from "../UI/LoadingIndicator";
 import "./IngredientList.css";
 
 const IngredientList = props => {
+  console.log("RENDERING LIST", props);
   return (
     <section className="ingredient-list">
       <h2>Ingredients</h2>

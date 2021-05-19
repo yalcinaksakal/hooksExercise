@@ -14,7 +14,7 @@ const Search = React.memo(props => {
       if (filter !== lastSearchedText) {
         console.log("searching");
         setLastSearchedText(filter);
-        onSearch(filter);
+        onSearch(filter.toLowerCase());
       }
     }, 500);
     return () => clearTimeout(inputTimer);

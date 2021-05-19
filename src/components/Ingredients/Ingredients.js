@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import idGen from "../../helper/idGenerator";
 import ErrorModal from "../UI/ErrorModal";
 import IngredientForm from "./IngredientForm";
@@ -21,6 +27,8 @@ const Ingredients = () => {
   const [err, setErr] = useState();
 
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+
+  // if a function is a dependency, in gereral useCallback sould be used
   const fetchNewList = useCallback((newList = null, filterText = null) => {
     console.log("fetching");
     setIsloading(true);
@@ -71,25 +79,34 @@ const Ingredients = () => {
   //   console.log("rendering ingredients", userIngredients);
   // }, [userIngredients]);
 
-  const addIngredientHandler = ingredient => {
-    if (!ingredient.amount) return;
-    const index = userIngredients.findIndex(
-      ing => ing.title === ingredient.title
-    );
-    const newList = [...userIngredients];
-    if (index !== -1) {
-      newList[index].amount += ingredient.amount;
-    } else
-      newList.push({
-        ...ingredient,
-        id: idGen.next().value,
-      });
-    fetchNewList(newList);
-  };
-  const removeIngredientHandler = id => {
-    const newList = userIngredients.filter(ingredient => ingredient.id !== id);
-    fetchNewList(newList);
-  };
+  ///  this function is passed to child component, so whenever parent rerenders, function will be re created and then child will be rerendered too.
+  const addIngredientHandler = useCallback(
+    ingredient => {
+      if (!ingredient.amount) return;
+      const index = userIngredients.findIndex(
+        ing => ing.title === ingredient.title
+      );
+      const newList = [...userIngredients];
+      if (index !== -1) {
+        newList[index].amount += ingredient.amount;
+      } else
+        newList.push({
+          ...ingredient,
+          id: idGen.next().value,
+        });
+      fetchNewList(newList);
+    },
+    [fetchNewList, userIngredients]
+  );
+  const removeIngredientHandler = useCallback(
+    id => {
+      const newList = userIngredients.filter(
+        ingredient => ingredient.id !== id
+      );
+      fetchNewList(newList);
+    },
+    [fetchNewList, userIngredients]
+  );
 
   const filterIngredientHandler = useCallback(
     filterText => {
@@ -98,6 +115,15 @@ const Ingredients = () => {
     [fetchNewList]
   );
 
+  const ingredientListEl = useMemo(() => {
+    return (
+      <IngredientList
+        ingredients={userIngredients}
+        onRemoveItem={removeIngredientHandler}
+        loading={isLoading}
+      />
+    );
+  }, [userIngredients, removeIngredientHandler, isLoading]);
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
@@ -107,11 +133,7 @@ const Ingredients = () => {
         {err ? (
           <ErrorModal onClose={() => setErr(null)}>{err}</ErrorModal>
         ) : (
-          <IngredientList
-            ingredients={userIngredients}
-            onRemoveItem={removeIngredientHandler}
-            loading={isLoading}
-          />
+          ingredientListEl
         )}
       </section>
     </div>

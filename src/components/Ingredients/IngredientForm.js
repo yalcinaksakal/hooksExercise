@@ -6,9 +6,12 @@ import "./IngredientForm.css";
 const IngredientForm = React.memo(props => {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
+  console.log("RENDERING FORM");
   const submitHandler = event => {
     event.preventDefault();
-    props.onAddIngredient({ title, amount: +amount });
+    setTitle("");
+    setAmount("");
+    props.onAddIngredient({ title: title.toLowerCase(), amount: +amount });
   };
 
   return (
